@@ -1,6 +1,10 @@
 from bdc_sample.core.driver import CSVDriver
 from datetime import datetime
+from shapely import geometry
+from geoalchemy2 import shape
 import os
+import geopandas
+
 
 class InSitu(CSVDriver):
     """
@@ -10,26 +14,19 @@ class InSitu(CSVDriver):
 
     **Make sure** you have `R` in PATH. You can download `R` in https://cran.r-project.org/
     """
-    def __init__(self, directory, storager, user, system):
-        """
-        Create InSitu Samples data handlers
-        :param directory: string Directory where converted files will be stored
-        :param storager: PostgisAccessor
-        """
-        super().__init__(directory, storager, user, system)
-
-        storager.open()
 
     def get_unique_classes(self, csv):
         return csv['label'].unique()
 
     def build_data_set(self, csv):
-        csv['srid'] = 4326
-        csv['class_id'] = csv['label'].apply(lambda row: self.storager.samples_map_id[row])
-        csv['user_id'] = 1
-        csv['lat'] = csv['latitude']
-        csv['long'] = csv['longitude']
-        return csv
+        geom_column = [geometry.Point(xy) for xy in zip(csv['longitude'], csv['latitude'])]
+        geocsv = geopandas.GeoDataFrame(csv, crs=4326, geometry=geom_column)
+
+        geocsv['location'] = geocsv['geometry'].apply(lambda point: ';'.join(['SRID=4326', point.wkt]))
+        geocsv['class_id'] = csv['label'].apply(lambda row: self.storager.samples_map_id[row])
+        geocsv['user_id'] = self.user.id
+
+        return geocsv
 
     def load_data_sets(self):
         """

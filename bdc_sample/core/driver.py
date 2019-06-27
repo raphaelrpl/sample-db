@@ -29,6 +29,7 @@ class Driver(metaclass=ABCMeta):
 
         for f in files:
             self.load(f)
+            print("{} loaded in memory".format(f))
 
         return self
 
@@ -61,9 +62,9 @@ class CSVDriver(Driver):
 
         self.load_classes(csv)
 
-        self.build_data_set(csv)
+        res = self.build_data_set(csv)
 
-        self._data_sets.extend(csv.T.to_dict().values())
+        self._data_sets.extend(res.T.to_dict().values())
 
     def load_classes(self, csv):
         self.storager.load()
@@ -81,8 +82,8 @@ class CSVDriver(Driver):
             sample_class = {
                 "class_name": class_name,
                 "description": class_name,
-                "luc_classification_system_id": 1,  # TODO Change to dynamic value
-                "user_id": self.user
+                "luc_classification_system_id": self.system.id,
+                "user_id": self.user.id
             }
 
             samples_to_save.append(sample_class)
@@ -146,8 +147,8 @@ class ShapeToTableDriver(Driver):
             sample_class = {
                 "class_name": class_name,
                 "description": class_name,
-                "luc_classification_system_id": 1,  # TODO Change to dynamic value
-                "user_id": 1  # TODO Change to dynamic value
+                "luc_classification_system_id": self.system.id,
+                "user_id": self.user.id
             }
 
             samples_to_save.append(sample_class)

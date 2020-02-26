@@ -1,4 +1,4 @@
-from bdc_sample.models.base_sql import BaseModel
+from lccs_db.models.base import BaseModel
 from geoalchemy2 import Geometry
 from sqlalchemy import Column,ForeignKey, Integer, String, Text
 

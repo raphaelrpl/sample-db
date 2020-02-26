@@ -1,5 +1,5 @@
-from bdc_sample.models.base_sql import BaseModel
 from geoalchemy2 import Geometry
+from lccs_db.models import BaseModel
 from sqlalchemy import Column, Date, ForeignKey, Integer
 
 

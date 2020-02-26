@@ -2,7 +2,7 @@
 
 
 from lccs_db.models.base import db, BaseModel
-from .observation import Observation
+from .observation import make_observation
 
 
-__all__ = ('db', 'Observation', 'BaseModel', )
+__all__ = ('db', 'make_observation', 'BaseModel', )

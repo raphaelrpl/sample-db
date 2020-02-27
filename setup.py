@@ -38,7 +38,7 @@ install_requires = [
 ]
 
 g = {}
-with open(os.path.join('bdc_sample', 'version.py'), 'rt') as fp:
+with open(os.path.join('sample_db', 'version.py'), 'rt') as fp:
     exec(fp.read(), g)
     version = g['version']
 

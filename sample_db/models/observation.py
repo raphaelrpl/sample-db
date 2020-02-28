@@ -1,7 +1,9 @@
 from typing import Callable
 from geoalchemy2 import Geometry
 from lccs_db.models import LucClass, db
-from sqlalchemy import Column, Date, ForeignKey, Integer, Table, MetaData
+from sqlalchemy import Column, Date, ForeignKey, Integer, Table
+
+from .base import metadata
 
 
 def make_observation(table_name: str, create: bool = False) -> Table:
@@ -16,7 +18,6 @@ def make_observation(table_name: str, create: bool = False) -> Table:
     Returns
         Observation definition
     """
-    metadata = MetaData(schema='sample_db')
 
     klass = Table('{}_observations'.format(table_name), metadata,
         Column('user_id', Integer, primary_key=True),

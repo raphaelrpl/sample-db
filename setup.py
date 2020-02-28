@@ -50,6 +50,11 @@ setup(
     author_email='admin@admin.com',
     url='https://github.com/brazil-data-cube/sampledb.git',
     packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'sample_db = sample_db.cli:cli',
+        ],
+    },
     extras_require=extras_require,
     install_requires=install_requires,
     setup_requires=setup_requires,

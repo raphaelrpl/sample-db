@@ -1,10 +1,10 @@
 from typing import Callable
 from geoalchemy2 import Geometry
-from lccs_db.models import BaseModel, LucClass, db
-from sqlalchemy import Column, Date, ForeignKey, Integer, Table
+from lccs_db.models import LucClass, db
+from sqlalchemy import Column, Date, ForeignKey, Integer, Table, MetaData
 
 
-def make_observation(table_name: str, create: bool = False) -> Callable[Table]:
+def make_observation(table_name: str, create: bool = False) -> Table:
     """Create customized observation model using a table name.
 
     TODO: Create an example
@@ -16,7 +16,9 @@ def make_observation(table_name: str, create: bool = False) -> Callable[Table]:
     Returns
         Observation definition
     """
-    klass = Table('{}_observations'.format(table_name), BaseModel.metadata,
+    metadata = MetaData(schema='sample_db')
+
+    klass = Table('{}_observations'.format(table_name), metadata,
         Column('user_id', Integer, primary_key=True),
         Column(
             'class_id',
@@ -30,7 +32,7 @@ def make_observation(table_name: str, create: bool = False) -> Callable[Table]:
     )
 
     if create:
-        if not db.engine.dialect.has_table(db.engine, klass.name):
-            BaseModel.metadata.tables[klass.name].create(bind=db.engine)
+        if not klass.exists(bind=db.engine):
+            klass.create(bind=db.engine)
 
     return klass

@@ -34,7 +34,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    'lccs-db @ git+git://github.com/brazil-data-cube/lccs-db.git#egg=lccs-db'
+    'lccs-db @ git+git://github.com/raphaelrpl/lccs-db.git@master#egg=lccs-db'
 ]
 
 g = {}
@@ -54,6 +54,13 @@ setup(
         'console_scripts': [
             'sample_db = sample_db.cli:cli',
         ],
+        'lccs_db.alembic': [
+            'sample_db = sample_db:alembic'
+        ],
+        'lccs_db.models': [
+            'sample_db = sample_db.models'
+            'sample_db_rally = sample_db.rally.models'
+        ]
     },
     extras_require=extras_require,
     install_requires=install_requires,
